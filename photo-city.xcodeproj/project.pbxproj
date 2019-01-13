@@ -12,6 +12,7 @@
 		9827357F21EAAFD40048D4AF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9827357D21EAAFD40048D4AF /* Main.storyboard */; };
 		9827358121EAAFD40048D4AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9827358021EAAFD40048D4AF /* Assets.xcassets */; };
 		9827358421EAAFD40048D4AF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9827358221EAAFD40048D4AF /* LaunchScreen.storyboard */; };
+		985C4CC421EAD05000AF976A /* DroppablePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C4CC321EAD05000AF976A /* DroppablePin.swift */; };
 		DC146D3396313D4C980D4564 /* Pods_photo_city.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C120389E83BEE41A5B7340C /* Pods_photo_city.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		9827358021EAAFD40048D4AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9827358321EAAFD40048D4AF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9827358521EAAFD40048D4AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		985C4CC321EAD05000AF976A /* DroppablePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroppablePin.swift; sourceTree = "<group>"; };
 		9AC39DFC899A5D6B6E25D152 /* Pods-photo-city.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-photo-city.release.xcconfig"; path = "Pods/Target Support Files/Pods-photo-city/Pods-photo-city.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,6 +94,7 @@
 		9827358E21EAB0260048D4AF /* View */ = {
 			isa = PBXGroup;
 			children = (
+				985C4CC321EAD05000AF976A /* DroppablePin.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9827357C21EAAFD40048D4AF /* MapVC.swift in Sources */,
+				985C4CC421EAD05000AF976A /* DroppablePin.swift in Sources */,
 				9827357A21EAAFD40048D4AF /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
