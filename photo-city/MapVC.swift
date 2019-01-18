@@ -40,11 +40,12 @@ class MapVC: UIViewController,UIGestureRecognizerDelegate {
         configureLocationServices()
         addDoubleTap()
         
+        // Defining the collectionview
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        collectionView?.backgroundColor = #colorLiteral(red: 0.02553943326, green: 0.8560433377, blue: 0.1855318986, alpha: 1)
+        collectionView?.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         
         bottomView.addSubview(collectionView!)
     }
@@ -81,7 +82,6 @@ class MapVC: UIViewController,UIGestureRecognizerDelegate {
     }
     
     private func retrieveUrls(forAnnotation annotation: DroppablePin, handler: @escaping (_ status: Bool) -> ()) {
-        imageURLArray = []
         
         Alamofire.request(flickrUrl(forApiKey: APIKey, withAnnotation: annotation, numberOfPhotos: 40)).responseJSON { (response) in
             guard let json = response.result.value as? Dictionary<String, AnyObject> else { return }
@@ -96,7 +96,6 @@ class MapVC: UIViewController,UIGestureRecognizerDelegate {
     }
     
     private func retrieveImages(handler: @escaping (_ status: Bool) -> ()) {
-        imageArray = []
         
         for url in imageURLArray {
             Alamofire.request(url).responseImage(completionHandler: { (response) in
@@ -122,6 +121,13 @@ class MapVC: UIViewController,UIGestureRecognizerDelegate {
         collectionView?.addSubview(progressLbl)
     }
     
+    private func cancelAllSessions() {
+        Alamofire.SessionManager.default.session.getTasksWithCompletionHandler { (sessionDataTask, uploadData, downloadData) in
+            sessionDataTask.forEach({$0.cancel()})
+            downloadData.forEach({$0.cancel()})
+        }
+    }
+    
     private func removeProgressLbl() {
         if progressLabel != nil {
             progressLabel?.removeFromSuperview()
@@ -129,6 +135,7 @@ class MapVC: UIViewController,UIGestureRecognizerDelegate {
     }
     
     @objc private func animateViewDown() {
+        cancelAllSessions()
         pullUpViewHeightConstraint.constant = 0
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -172,8 +179,14 @@ extension MapVC: MKMapViewDelegate {
         
         // Actions
         removePreviousPin()
+        cancelAllSessions()
         removeSpinner()
         removeProgressLbl()
+        
+        imageURLArray = []
+        imageArray = []
+        
+        collectionView?.reloadData()
         
         animateViewUp()
         addSwipe()
@@ -203,8 +216,9 @@ extension MapVC: MKMapViewDelegate {
                         // hide spinner
                         self.removeSpinner()
                         // hide label
-                        self.removeProgressLbl()
-                        // reload collectionView
+                        self.removeProgressLbl()                        
+                        // reload the collection view to show the images
+                        self.collectionView?.reloadData()
                     }
                 })
             }
@@ -237,14 +251,16 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell
-        guard let photoCell = cell else { return UICollectionViewCell() }
-        return photoCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell else { return UICollectionViewCell()}
+        let imageFromIndex = imageArray[indexPath.row]
+        let imageView = UIImageView(image: imageFromIndex)
+        cell.addSubview(imageView)
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // number of items in array
-        return 4
+        return imageArray.count
     }
     
 }
